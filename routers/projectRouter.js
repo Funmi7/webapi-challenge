@@ -38,17 +38,52 @@ function validateProject(req, res, next) {
   }
 }
 
+// CRUD operations
+
 router.get('/', validateProjectId, (req, res) => {
-  // projectModelDb.get(req.body)
-  // .then(posts => {
-  //   res.status(200).json(posts)
-  // })
-  // .catch(error => {
-  //   res.status(500).json({
-  //     error: `Error fetching projects ${error.message}`
-  //   });
-  // });
   res.json(req.project)
+});
+
+router.post('/', validateProject, (req, res) => {
+  projectModelDb.insert(req.body)
+  .then(project => {
+    res.status(210).json(project)
+  })
+  .catch(error => {
+    res.status(400).json({
+      error: `Error adding project ${error.message}`
+    });
+  });
+});
+
+router.get('/:id', validateProjectId, (req, res) => {
+  res.json(req.project)
+});
+
+router.put('/:id', [validateProjectId, validateProject], (req, res) => {
+  projectModelDb.update(req.project.id, req.body)
+  .then(updatedProject => {
+    res.status(200).json(updatedProject)
+  })
+  .catch(error => {
+    res.status(500).json({
+      error: `Error updating project ${error}`
+    });
+  });
+});
+
+router.delete('/:id', validateProjectId, (req, res) => {
+  projectModelDb.remove(req.project.id)
+  .then(() => {
+    res.status(200).json({
+      message: 'The project has been deleted'
+    })
+  })
+  .catch(error => {
+    res.status(500).json({
+      error: `Unable to delete project ${error.message}`
+    });
+  });
 });
 
 module.exports = router;
