@@ -13,13 +13,13 @@ function validateProjectId(req, res, next) {
       next()
     } else {
       res.status(400).json({
-        message: 'Invalid user ID'
+        message: 'Invalid project ID'
       })
     }
   })
   .catch(error => {
     res.status(500).json({
-      error: `Can't load the user id ${error.message}`
+      error: `Can't load the project id ${error.message}`
     })
   })
 }
