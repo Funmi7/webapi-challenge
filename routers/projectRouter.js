@@ -86,6 +86,18 @@ router.delete('/:id', validateProjectId, (req, res) => {
   });
 });
 
+router.get('/:id/actions', validateProjectId, (req, res) => {
+  projectModelDb.getProjectActions(req.project.id)
+  .then(actions => {
+    res.status(200).json(actions)
+  })
+  .catch(error => {
+    res.status(500).json({
+      error: `Error fetching actions ${error.message}`
+    })
+  })
+})
+
 module.exports = router;
 
 
